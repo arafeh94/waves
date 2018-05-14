@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <?php
+include 'Database.php';
+
+$d = new Database();
 
 if (!empty($_FILES['media'])) {
     if (!file_exists('uploads')) mkdir('uploads', 0777, true);
