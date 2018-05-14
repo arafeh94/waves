@@ -3,8 +3,7 @@
 <?php
 include 'Database.php';
 
-$d = new Database();
-
+Database::getMedias();
 if (!empty($_FILES['media'])) {
     if (!file_exists('uploads')) mkdir('uploads', 0777, true);
     $path = "uploads/";
