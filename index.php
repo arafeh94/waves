@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html>
+<?php
+
+if(!empty($_FILES['media']))
+{
+    $path = "uploads/";
+    $path = $path . basename( $_FILES['media']['name']);
+    $uploaded = move_uploaded_file($_FILES['media']['tmp_name'], $path);
+}
+
+?>
+
+
+
+
 <head>
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
@@ -47,7 +61,7 @@
         .modal-content {
             background-color: #fefefe;
             margin: auto;
-            padding: 20px;
+            padding: 2px;
             border: 1px solid #888;
             width: 80%;
         }
@@ -74,6 +88,11 @@
         .modal-reset {
 
         }
+
+        .modal-title {
+            width: 100%;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -81,12 +100,13 @@
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <form class="form-control modal-form">
+        <form class="form-control modal-form" method="post" enctype="multipart/form-data">
+            <div class="label modal-title">Hello World</div>
             <input type="file" name="media" class="form-control input">
             <input type="text" name="content" class="form-control input">
             <input type="hidden" name="lat" class="form-control input">
             <input type="hidden" name="lng" class="form-control input">
-            <input type="submit" class="btn btn-info modal-button modal-confirm">
+            <input type="submit" class="btn btn-info modal-button modal-confirm" name="submit">
             <input type="reset" class="btn btn-danger modal-button modal-reset" id="modal-reset" value="close">
         </form>
     </div>
