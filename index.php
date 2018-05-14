@@ -4,6 +4,18 @@
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+            crossorigin="anonymous"></script>
+
     <style>
         /* Always set the map height explicitly to define the size of the div
          * element that contains the map. */
@@ -40,24 +52,27 @@
             width: 80%;
         }
 
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
         .input {
             display: block;
-            width: 80%;
+            width: 100%;
             margin: 8px;
+        }
+
+        .modal-form {
+            text-align: center;
+        }
+
+        .modal-button {
+            float: right;
+            margin-left: 4px;
+        }
+
+        .modal-confirm {
+
+        }
+
+        .modal-reset {
+
         }
     </style>
 </head>
@@ -66,13 +81,13 @@
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <span id="modal-close" class="close">&times;</span>
-        <form>
-            <input type="file" name="media" class="input">
-            <input type="text" name="content" class="input">
-            <input type="hidden" name="lat" class="input">
-            <input type="hidden" name="lng" class="input">
-            <input type="submit">
+        <form class="form-control modal-form">
+            <input type="file" name="media" class="form-control input">
+            <input type="text" name="content" class="form-control input">
+            <input type="hidden" name="lat" class="form-control input">
+            <input type="hidden" name="lng" class="form-control input">
+            <input type="submit" class="btn btn-info modal-button modal-confirm">
+            <input type="reset" class="btn btn-danger modal-button modal-reset" id="modal-reset" value="close">
         </form>
     </div>
 </div>
@@ -118,9 +133,9 @@
             }
         },
         init: function () {
-            page.modal.views.close.onclick = function () {
+            document.getElementById('modal-reset').onclick = function (ev) {
                 page.modal.hide();
-            };
+            }
         }
     };
 
