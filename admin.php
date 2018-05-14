@@ -124,7 +124,7 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
             center: {lat: -34.397, lng: 150.644},
             zoom: 15
         });
-        map.addListener('click', function (e) {
+        map.addListener('rightclick', function (e) {
             document.getElementById('media-lat').value = e.latLng.lat();
             document.getElementById('media-lng').value = e.latLng.lng();
             page.modal.show();
