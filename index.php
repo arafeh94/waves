@@ -3,12 +3,14 @@
 <?php
 include 'Database.php';
 
-Database::getMedias();
-if (!empty($_FILES['media'])) {
+if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng']) && !empty($_POST['lat'])) {
     if (!file_exists('uploads')) mkdir('uploads', 0777, true);
     $path = "uploads/";
     $path = $path . basename($_FILES['media']['name']);
     $uploaded = move_uploaded_file($_FILES['media']['tmp_name'], $path);
+    if ($uploaded) {
+        Database::addMedia($path, $_POST['content'], $_POST['lng'], $_POST['lat']);
+    }
 }
 
 ?>
@@ -100,12 +102,12 @@ if (!empty($_FILES['media'])) {
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <form class="form-control modal-form" method="post" enctype="multipart/form-data">
+        <form class="form-control modal-form" id="media-form" method="post" enctype="multipart/form-data">
             <div class="label modal-title">Hello World</div>
             <input type="file" name="media" class="form-control input">
             <input type="text" name="content" class="form-control input">
-            <input type="hidden" name="lat" class="form-control input">
-            <input type="hidden" name="lng" class="form-control input">
+            <input type="hidden" id="media-lat" name="lat" class="form-control input">
+            <input type="hidden" id="media-lng" name="lng" class="form-control input">
             <input type="submit" class="btn btn-info modal-button modal-confirm" name="submit">
             <input type="reset" class="btn btn-danger modal-button modal-reset" id="modal-reset" value="close">
         </form>
@@ -123,6 +125,8 @@ if (!empty($_FILES['media'])) {
             zoom: 15
         });
         map.addListener('click', function (e) {
+            document.getElementById('media-lat').value = e.latLng.lat();
+            document.getElementById('media-lng').value = e.latLng.lng();
             page.modal.show();
         });
     }
@@ -134,6 +138,7 @@ if (!empty($_FILES['media'])) {
 
 <script>
     var page = {
+        form: document.getElementById('media-form'),
         modal: {
             _shown: false,
             _modal: document.getElementById('modal'),

@@ -32,7 +32,7 @@ class Database
     static function addMedia($content, $path, $lat, $lng)
     {
         $sql = "INSERT INTO media (Content, MediaPath, Lat, Lng) VALUES (
-            {$content},{$path},{$lat},{$lng}
+            '{$content}','{$path}',{$lat},{$lng}
         )";
         return self::getInstance()->query($sql);
     }
