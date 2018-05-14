@@ -16,11 +16,11 @@ class Media
 
     public function __construct($id, $content, $path, $lat, $lng)
     {
-        $this->MediaId = $id;
+        $this->MediaId = (int)$id;
         $this->Content = $content;
         $this->MediaPath = $path;
-        $this->Lat = $lat;
-        $this->Lng = $lng;
+        $this->Lat = (int)$lat;
+        $this->Lng = (int)$lng;
     }
 
 }

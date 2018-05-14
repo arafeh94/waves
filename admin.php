@@ -116,21 +116,6 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
 
 
 <div id="map"></div>
-<script>
-    var map;
-
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -34.397, lng: 150.644},
-            zoom: 15
-        });
-        map.addListener('rightclick', function (e) {
-            document.getElementById('media-lat').value = e.latLng.lat();
-            document.getElementById('media-lng').value = e.latLng.lng();
-            page.modal.show();
-        });
-    }
-</script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9OlshaErMHm0CRLm9tQalSD379fPWv3c&callback=initMap">
 </script>
@@ -138,6 +123,8 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
 
 <script>
     var page = {
+        map: null,
+        waves: <?=json_encode(Database::getMedias())?>,
         form: document.getElementById('media-form'),
         modal: {
             _shown: false,
@@ -160,13 +147,32 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
         init: function () {
             document.getElementById('modal-reset').onclick = function (ev) {
                 page.modal.hide();
-            }
+            };
         }
     };
 
     window.addEventListener('load', function () {
         page.init();
     });
+
+    function initMap() {
+        page.map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 15
+        });
+        page.map.addListener('rightclick', function (e) {
+            document.getElementById('media-lat').value = e.latLng.lat();
+            document.getElementById('media-lng').value = e.latLng.lng();
+            page.modal.show();
+        });
+        page.waves.forEach(function (value) {
+            var marker = new google.maps.Marker({
+                position: {lat: value.Lat, lng: value.Lng},
+                map: page.map,
+                title: 'Hello World!'
+            });
+        });
+    }
 </script>
 
 </html>
