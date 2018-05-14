@@ -1,1 +1,1 @@
-git clone https://github.com/arafeh94/waves
+`git clone https://github.com/arafeh94/waves`
