@@ -9,7 +9,7 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
     $path = $path . basename($_FILES['media']['name']);
     $uploaded = move_uploaded_file($_FILES['media']['tmp_name'], $path);
     if ($uploaded) {
-        Database::addMedia($path, $_POST['content'], $_POST['lng'], $_POST['lat']);
+        Database::addMedia($_POST['content'], $path, $_POST['lng'], $_POST['lat']);
     }
 }
 
@@ -46,13 +46,14 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
         }
 
         .modal {
-            opacity: 0.95;
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
             z-index: 1; /* Sit on top */
             padding-top: 100px; /* Location of the box */
             left: 0;
             top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
             overflow: auto; /* Enable scroll if needed */
             background-color: rgb(0, 0, 0); /* Fallback color */
             background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
@@ -115,45 +116,19 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
 
 
 <div id="map"></div>
-<script>
-    document.addEventListener('contextmenu', event => event.preventDefault());
-
-    var map;
-    var markers = [];
-
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -34.397, lng: 150.644},
-            zoom: 15
-        });
-        map.addListener('rightclick', function (e) {
-            document.getElementById('media-lat').value = e.latLng.lat();
-            document.getElementById('media-lng').value = e.latLng.lng();
-
-
-
-            var infowindow = new google.maps.InfoWindow({
-                content: "..."
-            });
-            var marker = new google.maps.Marker({
-                position: e.latLng,
-                map: map
-            });
-            infowindow.open(map, marker);
-            markers.push({infowindow: infowindow, marker: marker});
-
-
-            page.modal.show();
-        });
-    }
-</script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9OlshaErMHm0CRLm9tQalSD379fPWv3c&callback=initMap">
 </script>
 </body>
 
 <script>
+    document.addEventListener('contextmenu', function (ev) {
+        ev.preventDefault()
+    });
     var page = {
+        map: null,
+        markers: [],
+        waves: <?=json_encode(Database::getMedias())?>,
         form: document.getElementById('media-form'),
         modal: {
             _shown: false,
@@ -176,16 +151,37 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
         init: function () {
             document.getElementById('modal-reset').onclick = function (ev) {
                 page.modal.hide();
-                var last = markers[markers.length-1];
-                last.infowindow.close(null, last.marker);
-                last.marker.setMap(null);
-            }
+            };
         }
     };
 
     window.addEventListener('load', function () {
         page.init();
     });
+
+    function initMap() {
+        page.map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 33.892795, lng: 35.477759},
+            zoom: 12
+        });
+        page.map.addListener('rightclick', function (e) {
+            document.getElementById('media-lat').value = e.latLng.lat();
+            document.getElementById('media-lng').value = e.latLng.lng();
+            page.modal.show();
+        });
+        page.waves.forEach(function (value) {
+            var infowindow = new google.maps.InfoWindow({
+                content: '<span style="max-width: 165px;display: block">' + 'asdasasdasasd asasdasasdasasdasasdasasd asasdasa sdasasdas asdasasdasasdasasdasasdasasdasasdasasdasasdasasdasasdasasdasas dasas dasasdasasda sasdasasda sasdasasdasas dasasdasasdasasdasasdas' + '</span>' + '<button class="btn">watch</button>'
+            });
+            var marker = new google.maps.Marker({
+                position: {lat: value.Lng, lng: value.Lat},
+                map: page.map,
+                wave: value
+            });
+            infowindow.open(map, marker);
+            page.markers.push(marker);
+        });
+    }
 </script>
 
 </html>
