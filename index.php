@@ -2,19 +2,6 @@
 <html>
 <?php
 include 'Database.php';
-
-if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng']) && !empty($_POST['lat'])) {
-    if (!file_exists('uploads')) mkdir('uploads', 0777, true);
-    $path = "uploads/";
-    $path = $path . basename($_FILES['media']['name']);
-    $uploaded = move_uploaded_file($_FILES['media']['tmp_name'], $path);
-    if ($uploaded) {
-        Database::addMedia($_POST['content'], $path, $_POST['lng'], $_POST['lat']);
-    }
-}
-
-$medias = Database::getMedias();
-
 ?>
 
 
@@ -35,8 +22,6 @@ $medias = Database::getMedias();
             crossorigin="anonymous"></script>
 
     <style>
-        /* Always set the map height explicitly to define the size of the div
-         * element that contains the map. */
         #map {
             height: 100%;
         }
@@ -67,35 +52,26 @@ $medias = Database::getMedias();
             margin: auto;
             padding: 2px;
             border: 1px solid #888;
-            width: 80%;
-        }
-
-        .input {
-            display: block;
-            width: 100%;
-            margin: 8px;
-        }
-
-        .modal-form {
+            width: 50%;
             text-align: center;
-        }
-
-        .modal-button {
-            float: right;
-            margin-left: 4px;
-        }
-
-        .modal-confirm {
-
-        }
-
-        .modal-reset {
-
         }
 
         .modal-title {
             width: 100%;
             text-align: center;
+        }
+
+
+
+
+        .modal-reset {
+
+        }
+
+        .btn {
+            width: 100px;
+            text-align: center;
+            margin:0 auto;
         }
     </style>
 </head>
@@ -104,18 +80,14 @@ $medias = Database::getMedias();
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <form class="form-control modal-form" id="media-form" method="post" enctype="multipart/form-data">
-            <div class="label modal-title">Hello World</div>
-            <input type="file" name="media" class="form-control input">
-            <input type="text" name="content" class="form-control input">
-            <input type="hidden" id="media-lat" name="lat" class="form-control input">
-            <input type="hidden" id="media-lng" name="lng" class="form-control input">
-            <input type="submit" class="btn btn-info modal-button modal-confirm" name="submit">
-            <input type="reset" class="btn btn-danger modal-button modal-reset" id="modal-reset" value="close">
-        </form>
+        <div id="title"></div>
+        <div id="videoDiv">
+            <video id="video" controls>
+            </video>
+        </div>
+        <input type="reset" class="btn btn-danger modal-button modal-reset" id="modal-reset" value="close">
     </div>
 </div>
-
 
 
 <div id="map"></div>
@@ -136,7 +108,9 @@ $medias = Database::getMedias();
         modal: {
             _shown: false,
             _modal: document.getElementById('modal'),
-            show: function () {
+            show: function (desc, url) {
+                document.getElementById("title").innerHTML = desc;
+                changeSource(url);
                 this._shown = true;
                 this._modal.style.display = "block";
             },
@@ -154,6 +128,7 @@ $medias = Database::getMedias();
         init: function () {
             document.getElementById('modal-reset').onclick = function (ev) {
                 page.modal.hide();
+                stopVideo();
             };
         }
     };
@@ -174,7 +149,7 @@ $medias = Database::getMedias();
         });
         page.waves.forEach(function (value) {
             var infowindow = new google.maps.InfoWindow({
-                content: '<span style="max-width: 165px;display: block">' + 'description' + '</span>' + '<button class="btn">watch</button>'
+                content: '<span style="max-width: 165px;display: block">' + value.Content + '</span>' + '<button onclick="view('+value.MediaId+')" class="btn">watch</button>'
             });
             var marker = new google.maps.Marker({
                 position: {lat: value.Lng, lng: value.Lat},
@@ -184,6 +159,30 @@ $medias = Database::getMedias();
             infowindow.open(map, marker);
             page.markers.push(marker);
         });
+    }
+
+    function view(value){
+        var _wave = page.waves.filter((x) => { return x.MediaId == value; });
+        if(_wave.length == 0)
+            return;
+        console.log(_wave);
+        var wave = _wave[0];
+        page.modal.show(wave.Content, wave.MediaPath);
+        console.log(wave);
+    }
+
+
+    function changeSource(url) {
+        var video = document.getElementById('video');
+        video.src = url;
+        video.play();
+    }
+
+
+
+    function stopVideo() {
+        var video = document.getElementById('video');
+        video.pause();
     }
 </script>
 

@@ -42,7 +42,7 @@ class Database
      */
     static function getMedias()
     {
-        $sql = "SELECT * FROM media";
+        $sql = "SELECT * FROM media where IsDeleted = 0";
         $rows = self::getInstance()->query($sql)->fetch_all(MYSQLI_ASSOC);
         $medias = array_map(function ($assoc) {
             return new Media($assoc['MediaId'], $assoc['Content'], $assoc['MediaPath'], $assoc['Lat'], $assoc['Lng']);
