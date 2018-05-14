@@ -2,16 +2,14 @@
 <html>
 <?php
 
-if(!empty($_FILES['media']))
-{
+if (!empty($_FILES['media'])) {
+    if (!file_exists('uploads')) mkdir('uploads', 0777, true);
     $path = "uploads/";
-    $path = $path . basename( $_FILES['media']['name']);
+    $path = $path . basename($_FILES['media']['name']);
     $uploaded = move_uploaded_file($_FILES['media']['tmp_name'], $path);
 }
 
 ?>
-
-
 
 
 <head>
