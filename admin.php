@@ -9,7 +9,7 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
     $path = $path . basename($_FILES['media']['name']);
     $uploaded = move_uploaded_file($_FILES['media']['tmp_name'], $path);
     if ($uploaded) {
-        Database::addMedia($path, $_POST['content'], $_POST['lng'], $_POST['lat']);
+        Database::addMedia($path, $_POST['content'], $_POST['lat'], $_POST['lng']);
     }
 }
 
@@ -158,7 +158,7 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
     function initMap() {
         page.map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: -34.397, lng: 150.644},
-            zoom: 15
+            zoom: 1
         });
         page.map.addListener('rightclick', function (e) {
             document.getElementById('media-lat').value = e.latLng.lat();

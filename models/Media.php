@@ -19,8 +19,8 @@ class Media
         $this->MediaId = (int)$id;
         $this->Content = $content;
         $this->MediaPath = $path;
-        $this->Lat = (int)$lat;
-        $this->Lng = (int)$lng;
+        $this->Lat = (double)$lat;
+        $this->Lng = (double)$lng;
     }
 
 }
