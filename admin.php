@@ -46,14 +46,13 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
         }
 
         .modal {
+            opacity: 0.95;
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
             z-index: 1; /* Sit on top */
             padding-top: 100px; /* Location of the box */
             left: 0;
             top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
             overflow: auto; /* Enable scroll if needed */
             background-color: rgb(0, 0, 0); /* Fallback color */
             background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
@@ -117,7 +116,10 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
 
 <div id="map"></div>
 <script>
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
     var map;
+    var markers = [];
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -127,6 +129,20 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
         map.addListener('rightclick', function (e) {
             document.getElementById('media-lat').value = e.latLng.lat();
             document.getElementById('media-lng').value = e.latLng.lng();
+
+
+
+            var infowindow = new google.maps.InfoWindow({
+                content: "..."
+            });
+            var marker = new google.maps.Marker({
+                position: e.latLng,
+                map: map
+            });
+            infowindow.open(map, marker);
+            markers.push({infowindow: infowindow, marker: marker});
+
+
             page.modal.show();
         });
     }
@@ -160,6 +176,9 @@ if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng'
         init: function () {
             document.getElementById('modal-reset').onclick = function (ev) {
                 page.modal.hide();
+                var last = markers[markers.length-1];
+                last.infowindow.close(null, last.marker);
+                last.marker.setMap(null);
             }
         }
     };
