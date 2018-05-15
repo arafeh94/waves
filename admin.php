@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
 <?php
+session_start();
+if (empty($_SESSION['user'])) {
+    header('location: login.php');
+}
+
 include 'Database.php';
 
 if (!empty($_FILES['media']) && !empty($_POST['content']) && !empty($_POST['lng']) && !empty($_POST['lat'])) {
@@ -19,7 +24,7 @@ $medias = Database::getMedias();
 
 
 <head>
-    <title>Simple Map</title>
+    <title>Waves</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
@@ -116,6 +121,15 @@ $medias = Database::getMedias();
     </div>
 </div>
 
+<button style="position: absolute;
+        z-index: 999;
+        border-radius: 50%;width: 50px;height: 50px;
+        background-image: url(./logout.png);
+        bottom: 24px;
+        background-repeat:no-repeat;
+        background-size: 100% 100%;
+        right: 24px;"
+        onclick="javascript:window.location.replace('logout.php');"></button>
 
 
 <div id="map"></div>
@@ -165,7 +179,8 @@ $medias = Database::getMedias();
     function initMap() {
         page.map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 33.892795, lng: 35.477759},
-            zoom: 12
+            zoom: 12,
+            disableDefaultUI: true
         });
         page.map.addListener('rightclick', function (e) {
             document.getElementById('media-lat').value = e.latLng.lat();

@@ -7,9 +7,10 @@
  */
 session_start();
 
-if (!empty($_SESSION['user']) || (!empty($_POST['password']) && $_POST['password'] === 'admin')) {
+if (!empty($_SESSION['user']) || (!empty($_POST['password']) && ($_POST['password'] === 'admin' || $_POST['password'] === 'user'))) {
     $_SESSION['user'] = 'admin';
-    header('location: index.php');
+    $next = $_POST['password'] === 'admin' ? 'admin.php' : 'index.php';
+    header("location: {$next}");
 }
 
 ?>
