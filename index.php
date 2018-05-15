@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html>
 <?php
+
+session_start();
+if (empty($_SESSION['user'])){
+    header('location: login.php');
+}
 include 'Database.php';
 ?>
 
 
 <head>
-    <title>Simple Map</title>
+    <title>Waves</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"

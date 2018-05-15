@@ -5,9 +5,11 @@
  * Date: 5/14/2018
  * Time: 10:47 PM
  */
+session_start();
 
-if (!empty($_POST['password']) && $_POST['password'] === 'admin') {
-    header('location: admin.php');
+if (!empty($_SESSION['user']) || (!empty($_POST['password']) && $_POST['password'] === 'admin')) {
+    $_SESSION['user'] = 'admin';
+    header('location: index.php');
 }
 
 ?>
