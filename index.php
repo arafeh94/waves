@@ -147,11 +147,11 @@ include 'Database.php';
             center: {lat: 33.892795, lng: 35.477759},
             zoom: 12
         });
-        page.map.addListener('rightclick', function (e) {
-            document.getElementById('media-lat').value = e.latLng.lat();
-            document.getElementById('media-lng').value = e.latLng.lng();
-            page.modal.show();
-        });
+        // page.map.addListener('rightclick', function (e) {
+        //     document.getElementById('media-lat').value = e.latLng.lat();
+        //     document.getElementById('media-lng').value = e.latLng.lng();
+        //     page.modal.show();
+        // });
         page.waves.forEach(function (value) {
             var infowindow = new google.maps.InfoWindow({
                 content: '<span style="max-width: 165px;display: block">' + value.Content + '</span>' + '<button onclick="view('+value.MediaId+')" class="btn">watch</button>'

@@ -174,7 +174,7 @@ $medias = Database::getMedias();
         });
         page.waves.forEach(function (value) {
             var infowindow = new google.maps.InfoWindow({
-                content: '<span style="max-width: 165px;display: block">' + 'description' + '</span>' + '<button class="btn">watch</button>'
+                content: '<span style="max-width: 165px;display: block">' + value.Content + '</span>'
             });
             var marker = new google.maps.Marker({
                 position: {lat: value.Lng, lng: value.Lat},
